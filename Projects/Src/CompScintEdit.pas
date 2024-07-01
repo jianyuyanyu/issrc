@@ -220,7 +220,6 @@ begin
   Call(SCI_AUTOCSETIGNORECASE, 1, 0);
   Call(SCI_AUTOCSETOPTIONS, SC_AUTOCOMPLETE_FIXED_SIZE, 0); { Removes the ugly WS_THICKFRAME header at the cost of resizability }
   Call(SCI_AUTOCSETMAXHEIGHT, 12, 0);
-  Call(SCI_AUTOCSETMULTI, SC_MULTIAUTOC_EACH, 0);
 
   Call(SCI_SETMULTIPLESELECTION, 1, 0);
   Call(SCI_SETADDITIONALSELECTIONTYPING, 1, 0);
@@ -468,6 +467,12 @@ begin
 
     Call(SCI_SETELEMENTCOLOUR, SC_ELEMENT_LIST, FTheme.Colors[tcFore] or (SC_ALPHA_OPAQUE shl 24));
     Call(SCI_SETELEMENTCOLOUR, SC_ELEMENT_LIST_BACK, FTheme.Colors[tcBack] or (SC_ALPHA_OPAQUE shl 24));
+    var Options := Call(SCI_AUTOCGETOPTIONS, 0, 0);
+    if FTheme.Dark then
+      Options := Options or SC_AUTOCOMPLETE_DARK_MODE
+    else
+      Options := Options and not SC_AUTOCOMPLETE_DARK_MODE;
+    Call(SCI_AUTOCSETOPTIONS, Options, 0);
 
     var SelBackColor := FTheme.Colors[tcSelBack];
     Call(SCI_SETELEMENTCOLOUR, SC_ELEMENT_SELECTION_BACK, SelBackColor);
